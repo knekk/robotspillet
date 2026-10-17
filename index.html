@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#2b6cb0">
+  <title>Robotspillet</title>
+  <link rel="icon" href="assets/robot.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== Start screen: choose player ===== -->
+  <section id="screen-start" class="screen">
+    <div class="start-card">
+      <img src="assets/robot.svg" alt="" class="start-robot">
+      <h1 data-i18n="title">Robotspillet</h1>
+      <p data-i18n="whoPlays">Hvem skal spille?</p>
+      <div id="player-list" class="player-list"></div>
+      <form id="new-player-form" class="new-player-form">
+        <input id="new-player-name" type="text" maxlength="12" autocomplete="off" data-i18n-placeholder="yourName" placeholder="Navnet ditt">
+        <button type="submit" class="btn btn-primary" data-i18n="start">Start</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== World / level select ===== -->
+  <section id="screen-levels" class="screen hidden">
+    <header class="topbar">
+      <button id="btn-change-player" class="btn btn-icon" title="Bytt spiller">👤 <span id="current-player-name"></span></button>
+      <h2 data-i18n="chooseLevel">Velg brett</h2>
+      <span></span>
+    </header>
+    <div id="world-list" class="world-list"></div>
+  </section>
+
+  <!-- ===== Game screen ===== -->
+  <section id="screen-game" class="screen hidden">
+    <header class="topbar">
+      <button id="btn-back" class="btn btn-icon" title="Tilbake">⬅️</button>
+      <h2 id="level-title"></h2>
+      <button id="btn-help" class="btn btn-icon" title="Hjelp">❓</button>
+    </header>
+
+    <main class="game-layout">
+      <div class="board-wrap">
+        <div id="board" class="board"></div>
+        <p id="hint" class="hint"></p>
+      </div>
+
+      <aside class="program-panel">
+        <h3 data-i18n="yourProgram">Programmet ditt</h3>
+        <div id="program" class="program"></div>
+        <p id="block-count" class="block-count"></p>
+
+        <h3 data-i18n="blocks">Klosser</h3>
+        <div id="palette" class="palette"></div>
+
+        <div class="controls">
+          <button id="btn-run" class="btn btn-run">▶️ <span data-i18n="run">Kjør</span></button>
+          <button id="btn-reset" class="btn btn-secondary">🔄 <span data-i18n="reset">Nullstill</span></button>
+        </div>
+      </aside>
+    </main>
+  </section>
+
+  <!-- ===== Repeat-count picker ===== -->
+  <div id="modal-repeat" class="modal hidden">
+    <div class="modal-card">
+      <h3 data-i18n="howManyTimes">Hvor mange ganger?</h3>
+      <div id="repeat-choices" class="repeat-choices"></div>
+      <button id="btn-repeat-cancel" class="btn btn-secondary" data-i18n="cancel">Avbryt</button>
+    </div>
+  </div>
+
+  <!-- ===== Result modal (win / fail) ===== -->
+  <div id="modal-result" class="modal hidden">
+    <div class="modal-card">
+      <div id="result-emoji" class="result-emoji"></div>
+      <h3 id="result-title"></h3>
+      <p id="result-text"></p>
+      <div class="modal-buttons">
+        <button id="btn-result-retry" class="btn btn-secondary"></button>
+        <button id="btn-result-next" class="btn btn-primary"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Help modal ===== -->
+  <div id="modal-help" class="modal hidden">
+    <div class="modal-card">
+      <h3 data-i18n="helpTitle">Slik spiller du</h3>
+      <ul class="help-list">
+        <li data-i18n="help1">Trykk på en kloss for å legge den til i programmet.</li>
+        <li data-i18n="help2">Trykk på en kloss i programmet for å fjerne den.</li>
+        <li data-i18n="help3">Trykk Kjør, og se roboten følge programmet ditt!</li>
+        <li data-i18n="help4">Kom roboten ikke fram? Prøv igjen – det er sånn programmerere jobber.</li>
+      </ul>
+      <button id="btn-help-close" class="btn btn-primary" data-i18n="ok">OK</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

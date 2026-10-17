@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Brick wall -->
+  <rect width="100" height="100" fill="#a0522d"/>
+  <g fill="#c0694a" stroke="#6b3a1f" stroke-width="2">
+    <rect x="2" y="2" width="46" height="21"/>
+    <rect x="52" y="2" width="46" height="21"/>
+    <rect x="-22" y="27" width="46" height="21"/>
+    <rect x="27" y="27" width="46" height="21"/>
+    <rect x="77" y="27" width="46" height="21"/>
+    <rect x="2" y="52" width="46" height="21"/>
+    <rect x="52" y="52" width="46" height="21"/>
+    <rect x="-22" y="77" width="46" height="21"/>
+    <rect x="27" y="77" width="46" height="21"/>
+    <rect x="77" y="77" width="46" height="21"/>
+  </g>
+</svg>
