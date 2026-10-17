@@ -34,6 +34,23 @@ Fungerer på nettbrett, mobil og PC. Ingen installasjon.
 4. Trykk **Kjør** og se på!
 5. Krasjet roboten? Det er helt vanlig. Finn feilen og prøv igjen.
 
+Begge verdener er åpne fra start, så to søsken kan begynne på hvert sitt nivå.
+
+### Lag ditt eget brett
+
+Nederst på brettvelgeren finner du **Lag ditt eget brett**:
+
+1. Velg verktøy (🧱 Vegg, 🤖 Robot, 🏁 Mål, 🧽 Visk ut) og trykk på rutene.
+   Trykk på roboten en gang til for å snu den.
+2. Juster størrelse og eventuelt «Maks klosser» for å tvinge fram løkker.
+3. Spillet sjekker hele tiden at roboten faktisk kan komme fram.
+4. **Koden** (f.eks. `R1-55040405-62TDH`) oppdateres automatisk. Skriv den ned
+   eller kopier den – neste gang limer du den inn i «Spill en kode»-feltet, så
+   får du nøyaktig samme brett tilbake. Koden fungerer på alle enheter.
+
+Mens du spiller et eget brett vises koden under brettet, og 🛠️-knappen tar deg
+tilbake til byggeren for å endre det.
+
 ## Teknisk
 
 - Ren HTML, CSS og JavaScript (ES-moduler). Ingen byggeverktøy, ingen avhengigheter.
@@ -51,9 +68,20 @@ robotspillet/
 │   ├── renderer.js     # tegner brettet og roboten
 │   ├── ui.js           # knapper, klosser, dialoger
 │   ├── storage.js      # lagring av framgang
+│   ├── builder.js      # brettbyggeren
+│   ├── levelcode.js    # koder brett til/fra tekst, sjekker løsbarhet
 │   └── i18n.js         # alle norske tekster
-└── assets/             # robot.svg, goal.svg, wall.svg
+├── assets/             # robot.svg, goal.svg, wall.svg
+└── test/solve.mjs      # node test/solve.mjs – sjekker alle brett og koder
 ```
+
+### Kodeformatet
+
+`R1-<bredde><høyde><robotX><robotY><retning><målX><målY><maks>-<vegger>`
+
+Hvert tall i midtdelen er ett tegn (0–9, a–z). Veggene er rutene rad for rad
+som bits, pakket fem og fem i tegnene `A–Z 2–9` (uten I, O, 0 og 1 for å unngå
+forveksling). Koden for et 5×5-brett er bare 17 tegn.
 
 ### Lage et nytt brett
 

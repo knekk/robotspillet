@@ -60,7 +60,6 @@ export function renderPlayers(players, onPick, onRemove) {
 export function renderWorlds(worlds, done, onPick) {
   const wrap = $('world-list');
   wrap.innerHTML = '';
-  let previousDone = true; // first level is always unlocked
 
   for (const world of worlds) {
     const card = document.createElement('section');
@@ -70,6 +69,10 @@ export function renderWorlds(worlds, done, onPick) {
       <p class="world-desc">${t(world.descKey)}</p>
       <div class="level-grid"></div>`;
     const grid = card.querySelector('.level-grid');
+
+    // Each world unlocks independently: its first level is always open,
+    // so two siblings can start in different worlds.
+    let previousDone = true;
 
     world.levels.forEach((lvl, i) => {
       const isDone = done[lvl.id] !== undefined;
@@ -93,8 +96,9 @@ export function renderWorlds(worlds, done, onPick) {
 /* ------------------------------------------------------------------ */
 
 export function setLevelHeader(level, index) {
-  $('level-title').textContent = `${index + 1}. ${level.name}`;
-  $('hint').textContent = level.hint || '';
+  $('level-title').textContent = level.custom ? level.name : `${index + 1}. ${level.name}`;
+  $('hint').textContent = level.custom && level.code ? `${t('yourCode')}: ${level.code}` : level.hint || '';
+  $('btn-edit-level').classList.toggle('hidden', !level.custom);
 }
 
 export function renderPalette(blockTypes, onTap) {

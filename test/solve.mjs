@@ -4,7 +4,8 @@
 // solution uses more blocks than `best`.
 
 import { allLevels } from '../js/levels.js';
-import { run, countBlocks, STEP_MS } from '../js/interpreter.js';
+import { run, countBlocks } from '../js/interpreter.js';
+import { encodeLevel, decodeLevel, isSolvable, shortestPathBlocks } from '../js/levelcode.js';
 
 // Make the interpreter run instantly.
 globalThis.setTimeout = (fn) => fn();
@@ -52,5 +53,55 @@ for (const lvl of allLevels) {
   }
 }
 
-console.log(failed ? `\n${failed} level(s) failed` : '\nAll levels OK');
+// ---- Level code round-trip -------------------------------------------------
+
+console.log('\nLevel codes:');
+for (const lvl of allLevels) {
+  const code = encodeLevel(lvl);
+  const { level: back, error } = decodeLevel(code);
+  const problems = [];
+  if (error) problems.push(`decode error ${error}`);
+  else {
+    const same =
+      back.cols === lvl.cols &&
+      back.rows === lvl.rows &&
+      back.start.x === lvl.start.x &&
+      back.start.y === lvl.start.y &&
+      back.start.dir === lvl.start.dir &&
+      back.goal.x === lvl.goal.x &&
+      back.goal.y === lvl.goal.y &&
+      (back.maxBlocks || 0) === (lvl.maxBlocks || 0) &&
+      JSON.stringify([...back.walls].sort()) === JSON.stringify([...lvl.walls].sort());
+    if (!same) problems.push('round-trip mismatch');
+    if (!isSolvable(back)) problems.push('decoded level unsolvable');
+    // Lowercase / spaced input must also decode.
+    if (decodeLevel(' ' + code.toLowerCase() + ' ').error) problems.push('normalisation failed');
+  }
+  if (problems.length) {
+    console.log(`✖ ${lvl.id} ${code}: ${problems.join(', ')}`);
+    failed++;
+  } else {
+    console.log(`✔ ${lvl.id} ${code}`);
+  }
+}
+
+// Invalid codes must be rejected, not crash.
+for (const bad of ['', 'R1', 'R1-53011410', 'R1-53011410-!!!', 'R1-00011410-AAA', 'R1-53000000-AAA', 'R2-53011410-AAA']) {
+  const { error } = decodeLevel(bad);
+  if (!error) {
+    console.log(`✖ accepted invalid code "${bad}"`);
+    failed++;
+  }
+}
+
+// BFS sanity: walled-off goal is unreachable.
+const blocked = shortestPathBlocks(3, 3, { x: 0, y: 0, dir: 1 }, { x: 2, y: 2 }, new Set(['1,0', '1,1', '1,2']));
+if (Number.isFinite(blocked)) {
+  console.log('✖ BFS found a path through a solid wall');
+  failed++;
+} else {
+  console.log('✔ BFS rejects walled-off goal');
+}
+
+console.log(failed ? `\n${failed} check(s) failed` : '\nAll checks OK');
 process.exit(failed ? 1 : 0);

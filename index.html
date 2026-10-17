@@ -32,6 +32,87 @@
       <span></span>
     </header>
     <div id="world-list" class="world-list"></div>
+
+    <section class="world-card builder-card">
+      <h3 data-i18n="builderCardTitle">🛠️ Lag ditt eget brett</h3>
+      <p class="world-desc" data-i18n="builderCardDesc">Bygg et brett, få en kode, og spill det igjen senere.</p>
+      <div class="builder-card-actions">
+        <button id="btn-open-builder" class="btn btn-primary" data-i18n="builderOpen">Åpne bretbyggeren</button>
+        <form id="play-code-form" class="code-form">
+          <input id="play-code-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" data-i18n-placeholder="playCodePlaceholder" placeholder="R1-…" aria-label="Kode">
+          <button type="submit" class="btn btn-secondary">▶️ <span data-i18n="play">Spill</span></button>
+        </form>
+      </div>
+    </section>
+  </section>
+
+  <!-- ===== Level builder ===== -->
+  <section id="screen-builder" class="screen hidden">
+    <header class="topbar">
+      <button id="btn-builder-back" class="btn btn-icon" title="Tilbake">⬅️</button>
+      <h2 data-i18n="builderTitle">Lag brett</h2>
+      <span></span>
+    </header>
+
+    <main class="game-layout">
+      <div class="board-wrap">
+        <div id="builder-board" class="board builder-board"></div>
+        <p class="hint" data-i18n="builderHelp">Velg et verktøy og trykk på rutene. Trykk på roboten igjen for å snu den.</p>
+        <p id="builder-status" class="builder-status"></p>
+      </div>
+
+      <aside class="program-panel">
+        <h3>Verktøy</h3>
+        <div id="builder-tools" class="builder-tools">
+          <button type="button" class="btn tool" data-tool="wall">🧱 <span data-i18n="toolWall">Vegg</span></button>
+          <button type="button" class="btn tool" data-tool="start">🤖 <span data-i18n="toolStart">Robot</span></button>
+          <button type="button" class="btn tool" data-tool="goal">🏁 <span data-i18n="toolGoal">Mål</span></button>
+          <button type="button" class="btn tool" data-tool="erase">🧽 <span data-i18n="toolErase">Visk ut</span></button>
+        </div>
+
+        <div class="builder-row">
+          <span data-i18n="size">Størrelse</span>
+          <div class="stepper">
+            <button type="button" id="btn-cols-minus" class="btn btn-small">◀</button>
+            <span id="builder-size" class="stepper-value">5 × 4</span>
+            <button type="button" id="btn-cols-plus" class="btn btn-small">▶</button>
+            <button type="button" id="btn-rows-minus" class="btn btn-small">▲</button>
+            <button type="button" id="btn-rows-plus" class="btn btn-small">▼</button>
+          </div>
+        </div>
+
+        <div class="builder-row">
+          <span data-i18n="direction">Retning</span>
+          <button type="button" id="btn-dir" class="btn btn-small"><span id="builder-dir">➡️</span></button>
+        </div>
+
+        <div class="builder-row">
+          <span data-i18n="blockLimit">Maks klosser</span>
+          <div class="stepper">
+            <button type="button" id="btn-max-minus" class="btn btn-small">−</button>
+            <span id="builder-max" class="stepper-value">∞</span>
+            <button type="button" id="btn-max-plus" class="btn btn-small">+</button>
+          </div>
+        </div>
+
+        <button type="button" id="btn-builder-clear" class="btn btn-secondary" data-i18n="clearWalls">Fjern vegger</button>
+
+        <h3 data-i18n="yourCode">Koden din</h3>
+        <div class="code-row">
+          <input id="builder-code" type="text" readonly aria-label="Kode">
+          <button type="button" id="btn-builder-copy" class="btn btn-secondary" data-i18n="copy">Kopier</button>
+        </div>
+
+        <form id="builder-load-form" class="code-form">
+          <input id="builder-load-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" data-i18n-placeholder="loadCode" placeholder="Hent brett fra kode" aria-label="Kode">
+          <button type="submit" class="btn btn-secondary" data-i18n="load">Hent</button>
+        </form>
+
+        <div class="controls">
+          <button type="button" id="btn-builder-play" class="btn btn-run">▶️ <span data-i18n="play">Spill</span></button>
+        </div>
+      </aside>
+    </main>
   </section>
 
   <!-- ===== Game screen ===== -->
@@ -39,7 +120,10 @@
     <header class="topbar">
       <button id="btn-back" class="btn btn-icon" title="Tilbake">⬅️</button>
       <h2 id="level-title"></h2>
-      <button id="btn-help" class="btn btn-icon" title="Hjelp">❓</button>
+      <div class="topbar-right">
+        <button id="btn-edit-level" class="btn btn-icon hidden" title="Endre brett">🛠️</button>
+        <button id="btn-help" class="btn btn-icon" title="Hjelp">❓</button>
+      </div>
     </header>
 
     <main class="game-layout">

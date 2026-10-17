@@ -3,6 +3,8 @@
 
 import { worlds, allLevels, nextLevel } from './levels.js';
 import { Renderer } from './renderer.js';
+import { Builder } from './builder.js';
+import { decodeLevel } from './levelcode.js';
 import * as interp from './interpreter.js';
 import * as ui from './ui.js';
 import * as store from './storage.js';
@@ -22,6 +24,11 @@ export class Game {
     this.running = false;
     this.cancelled = false;
     this.renderer = new Renderer($('board'));
+    this.builder = new Builder({
+      onPlay: (level) => this.loadLevel(level),
+      onBack: () => this.showLevels(),
+      onToast: (msg) => ui.toast(msg),
+    });
     this._bind();
   }
 
@@ -61,6 +68,23 @@ export class Game {
   showLevels() {
     ui.renderWorlds(worlds, store.getDone(this.player), (lvl) => this.loadLevel(lvl));
     ui.showScreen('levels');
+  }
+
+  showBuilder(levelToEdit = null) {
+    this.cancelled = true;
+    this.running = false;
+    if (levelToEdit) this.builder.load(levelToEdit);
+    else this.builder.show();
+    ui.showScreen('builder');
+  }
+
+  playCode(input) {
+    const { level, error } = decodeLevel(input);
+    if (error) {
+      ui.toast(t('codeInvalid'));
+      return;
+    }
+    this.loadLevel(level);
   }
 
   loadLevel(level) {
@@ -202,8 +226,9 @@ export class Game {
 
     if (result.ok) {
       this.renderer.celebrate();
-      store.markDone(this.player, this.level.id, used);
-      const next = nextLevel(this.level.id);
+      const isCustom = !!this.level.custom;
+      if (!isCustom) store.markDone(this.player, this.level.id, used);
+      const next = isCustom ? null : nextLevel(this.level.id);
       const choice = await ui.showResult({
         ok: true,
         emoji: '🎉',
@@ -249,6 +274,14 @@ export class Game {
     });
     $('btn-run').addEventListener('click', () => this.run());
     $('btn-reset').addEventListener('click', () => this.resetProgram());
+    $('btn-edit-level').addEventListener('click', () => this.showBuilder(this.level));
+    $('btn-open-builder').addEventListener('click', () => this.showBuilder());
+    $('play-code-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('play-code-input');
+      this.playCode(input.value);
+      input.value = '';
+    });
     ui.bindHelp();
   }
 }
